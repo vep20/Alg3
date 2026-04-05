@@ -8,7 +8,7 @@
 //union ou 
 struct nodo {
     int n_chaves;
-    bool eh_folha;
+    short eh_folha;
     
 };
 
