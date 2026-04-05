@@ -1,11 +1,16 @@
 # makefile Arvore b
 # Alunos: Victor Eduardo e Ronaldo Pereira
 
+GRR = 20203937
+
+# Detectar se possui gcc 14 na maquina 
 CC      = $(shell command -v gcc-14 2> /dev/null || echo gcc)
-CFLAGS  = -Wall -Wextra -Werror -g -std=c2x 	#gcc utilizado é o antigo
+
+CFLAGS  = -Wall -Wextra -Werror -g -std=c23
 LDLIBS  = -lm
-MAIN    = test
-ENTREGA = $(MAIN)
+
+TARGET  = prova1_$(GRR)
+DIR     = prova1_$(GRR)
 
 # arquivo cabecalho
 HDR = arvoreB.h 
@@ -14,31 +19,32 @@ HDR = arvoreB.h
 OBJ = arvoreB.o test.o
 
 # construção do executavel
-$(MAIN): $(MAIN).o $(OBJ)
+$(TARGET): $(OBJ)
+	$(CC) $(OBJ) -o $(TARGET) $(LDLIBS)
 
-# construção dos arquivos-objeto
-$ (MAIN).o: $(MAIN).c $(HDR)
+# contrução .o
+test.o: test.c $(HDR)
+	$(CC) $(CFLAGS) -c test.c
 
-# contrução TAD
 arvoreB.o: arvoreB.c arvoreB.h 
+	$(CC) $(CFLAGS) -c arvoreB.c
 
 # execução
-run: $(MAIN)
-	./$(MAIN)
+run: $(TARGET)
+	./$(TARGET)
 
 # teste com valgrind 
-valgrind: $(MAIN)
-	valgrind --leak-check=full --track-origins=yes ./$(MAIN)
+valgrind: $(TARGET)
+	valgrind --leak-check=full --track-origins=yes ./$(TARGET)
 
 # gerar arquivo TGZ para entregar
 tgz: clean
-	-mkdir -p /tmp/$(USER)/$(ENTREGA)
-	chmod 0700 /tmp/$(USER)/$(ENTREGA)
-	cp *.c *.h conjunto.o makefile /tmp/$(USER)/$(ENTREGA)
-	tar czvf $(ENTREGA).tgz -C /tmp/$(USER) $(ENTREGA)
-	rm -rf /tmp/$(USER)
-	@echo "Arquivo $(ENTREGA).tgz criado para entrega"
+	mkdir -p $(DIR)
+	cp *.c *.h makefile $(DIR)
+	tar czvf $(DIR).tar.gz $(DIR)
+	rm -rf $(DIR)
+	@echo "Arquivo $(DIR).tar.gz criado para entrega"
 
 # limpar arquivos temporários
 clean:
-	rm -f *~ $(OBJ) $(MAIN) /tmp/$(USER)/$(ENTREGA) $(ENTREGA).tgz
+	rm -f *.o $(TARGET) $(DIR).tar.gz
