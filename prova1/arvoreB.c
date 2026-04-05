@@ -37,7 +37,7 @@ struct arvoreB *criarArvoreB(int32_t t_arvore){
 
     arvore->t_arvore = t_arvore;
 
-    // cria o nodo para armazenar na arvore 
+    // cria o nodo e preenche os membros para armazenar na arvore 
     arvore->raiz = cria_nodo (t_arvore, true);
          
     return arvore;
