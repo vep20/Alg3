@@ -55,11 +55,34 @@ struct arvoreB *criarArvoreB(int32_t t_arvore){
 
 // }
 
-// //union ou 
-// struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave,
-//                         int32_t* idxEncontrado){
+// função auxiliar para realizar a busca de forma recursiva (conforme Cormen)
+struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, int32_t* idxEncontrado){
+    // struct nodo *aux_atual;
+    int32_t aux;
 
-// }
+    aux = 0;// adaptado para vetores em c 
+    while ((aux < atual->n_chaves) && (chave > atual->chaves[aux]))
+        aux++;
+
+    if ((aux < atual->n_chaves) && (chave == atual->chaves[aux])){
+        *idxEncontrado = aux;
+        return atual;
+    } 
+    
+    else if (atual->eh_folha)
+        return NULL;
+    
+    atual = atual->filhos[aux];
+
+    return buscarArvoreBrec (atual, chave, idxEncontrado); 
+}
+
+struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado){
+    struct nodo *aux;
+
+    aux = buscarArvoreBrec (arvore->raiz, chave, idxEncontrado);
+    return aux;    
+}
 
 
 // void deletarArvore(struct arvoreB* arvore){

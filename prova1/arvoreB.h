@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
  
+// estrutura de um nodo para arvorB
 struct nodo {
     int32_t n_chaves; // numero de chaves em um nodo 
     int32_t *chaves; // chaves do nodo 
@@ -12,13 +13,18 @@ struct nodo {
     bool eh_folha; // booleano que informa se o nodo é folha ou não é 
 };
 
+// estrutura da arvoreB
 struct arvoreB {
   struct nodo *raiz; // ponteiro para um nodo raiz
   int32_t t_arvore; // grau minimo da arvore 
 };
 
+// fução para alocação de um nodo, retorna o nodo em caso de sucesso
+// ou mensagem de erro em caso de falha
 struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha);
 
+// função para alocação de uma arvoreB seguindo especificações Cormen
+// retorna a arvore em caso de sucesso ou mensagem de erro
 struct arvoreB* criarArvoreB(int32_t t_arvore);
 
 void inserirArvoreB(struct arvoreB* arvore, int32_t chave);
