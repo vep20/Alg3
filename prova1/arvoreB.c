@@ -28,7 +28,7 @@ struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha){
     return novo_nodo;
 }
 
-struct arvoreB *criarArvoreB(int32_t t_arvore){
+struct arvoreB *criarArvoreB (int32_t t_arvore){
     struct arvoreB *nova_arvore;
 
     nova_arvore = malloc (sizeof (struct arvoreB));
@@ -55,16 +55,16 @@ struct nodo *dividir_Raiz (struct arvoreB *arvore){
     struct nodo *nova_raiz;
 
     nova_raiz = cria_nodo(arvore->t_arvore, false);
-    nova_raiz->filhos[1] = arvore->raiz;
+    nova_raiz->filhos[0] = arvore->raiz; // adaptado para linguagem c
     arvore->raiz = nova_raiz;
     
-    dividir_filho (nova_raiz, 1);
+    dividir_filho (nova_raiz, 0);
     
     return nova_raiz;
 }
 
 
-void inserirArvoreB(struct arvoreB* arvore, int32_t chave){
+void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
     struct nodo *aux, *novo_nodo;
 
     aux = arvore->raiz;
@@ -75,7 +75,7 @@ void inserirArvoreB(struct arvoreB* arvore, int32_t chave){
     }
 
     else 
-        // insere na raiz
+        // insere na raiz, pois é o unico nodo
         inserir_não_cheio(aux, chave);
 
 }

@@ -30,20 +30,20 @@ struct arvoreB* criarArvoreB(int32_t t_arvore);
 // função auxiliar para inserção
 struct nodo *dividir_Raiz (struct arvoreB *arvore);
 
-void inserirArvoreB(struct arvoreB* arvore, int32_t chave);
+void inserirArvoreB (struct arvoreB* arvore, int32_t chave);
 
-void imprimirArvoreB(struct arvoreB* arvore);
+void imprimirArvoreB (struct arvoreB* arvore);
 
-void imprimirEmOrdem(struct arvoreB* arvore);
+void imprimirEmOrdem (struct arvoreB* arvore);
 
 // função auxiliar para realizar a busca de forma recursiva
 struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, 
                             int32_t* idxEncontrado);
 
-struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave,
+struct nodo* buscarArvoreB (struct arvoreB* arvore, int32_t chave,
                             int32_t* idxEncontrado);
                             
-void deletarArvore(struct arvoreB* arvore);
+void deletarArvore (struct arvoreB* arvore);
 
 // função para imprimir mensagem de erro e encerrar execução 
 void erro (char *msg);
