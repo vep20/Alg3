@@ -89,7 +89,7 @@ void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore){
 
         // realiza a divisão do filho se ele já esta cheio
         if (nodo->filhos[aux]->n_chaves ==  (2 * t_arvore - 1)){
-            dividir_filho (nodo, aux); //faltando argumentos da função
+            //dividir_filho (nodo, aux); //faltando argumentos da função
 
             // verificação para saber se a chave desce para o filho a direita
             if (chave > nodo->chaves[aux])
@@ -109,7 +109,7 @@ struct nodo *dividir_Raiz (struct arvoreB *arvore){
     nova_raiz->filhos[0] = arvore->raiz; // adaptado para linguagem c
     arvore->raiz = nova_raiz;
     
-    dividir_filho (nova_raiz, 0);// faltando argumentos da função
+    //dividir_filho (nova_raiz, 0);// faltando argumentos da função
     
     return nova_raiz;
 }
@@ -134,15 +134,15 @@ void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
 //Estrutura da fila para impressão hierárquica da arvoreB
 
 // Nó da fila que guarda um ponteiro para um nó da arvore B
-struct Nofila{
-    struct arvoreB *NodoArvore;
-    struct Nofila *prox;
+struct no_fila{
+    struct nodo *nodo_arvore;
+    struct no_fila *prox;
 };
 
 // Controle da fila
 struct Fila{
-    struct Nofila *inicio;
-    struct Nofila *fim;
+    struct no_fila *inicio;
+    struct no_fila *fim;
     int tamanho;
 };
 
@@ -161,43 +161,43 @@ struct Fila* criarFila(){
 }
 
 // insere os nodos da arvoreB na fila para impressão hierárquica
-void inserir_fila(struct Fila *fila, struct arvoreB *arvore){
-    if(!fila || !arvore)
-        erro("Fila ou arvore nula");
+void inserir_fila(struct Fila *fila, struct nodo *nodo_atual){
+    if(!fila || !nodo_atual)
+        erro("Fila ou nodo nulo");
 
-    struct Nofila *novoNofila = malloc(sizeof(struct Nofila));
+    struct no_fila *novo_no_fila = malloc(sizeof(struct no_fila));
 
-    if (!novoNofila)
+    if (!novo_no_fila)
         erro("Falha ao alocar memoria para nó da fila");
 
-    novoNofila->NodoArvore = arvore;
-    novoNofila->prox = NULL;
+    novo_no_fila->nodo_arvore = nodo_atual;
+    novo_no_fila->prox = NULL;
 
     if (fila->fim)
-        fila->fim->prox = novoNofila;
+        fila->fim->prox = novo_no_fila;
     else
-        fila->inicio = novoNofila;
+        fila->inicio = novo_no_fila;
 
-    fila->fim = novoNofila;
+    fila->fim = novo_no_fila;
     fila->tamanho++;
 }
 
 // remove os nodos da fila para impressão hierárquica, retornando o nodo da arvoreB
-struct arvoreB *remover_fila(struct Fila *fila){
+struct nodo *remover_fila(struct Fila *fila){
     if(!fila || !fila->inicio)
         erro("Fila vazia");
 
-    struct Nofila *nodo = fila->inicio;
-    struct arvoreB *arvore = nodo->NodoArvore;
+    struct no_fila *aux = fila->inicio;
+    struct nodo *info = aux->nodo_arvore;
 
-    fila->inicio = nodo->prox;
+    fila->inicio = aux->prox;
     if (!fila->inicio)
         fila->fim = NULL;
 
-    free(nodo);
+    free(aux);
     fila->tamanho--;
 
-    return arvore;
+    return info;
 }
 
 // verifica se a fila esta vazia
@@ -212,10 +212,11 @@ void liberar_fila(struct Fila *fila){
         remover_fila(fila);
     free(fila);
 }
+// fim da estrutura de fila
 
-
+//pronto
 void imprimirArvoreB(struct arvoreB* arvore){
-    if(!arvore)
+    if(!arvore || !arvore->raiz)
         erro("Arvore vazia");
 
     struct Fila *fila = criarFila();
@@ -227,7 +228,7 @@ void imprimirArvoreB(struct arvoreB* arvore){
     nivel = 0;
     
     //incia a busca em largura, inserindo a raiz da arvore na fila
-    inserir_fila(fila, arvore);
+    inserir_fila(fila, arvore->raiz);
 
     while (!fila_vazia(fila)){
         // recebe quantos nodos tem no nivel atual para controle de impressão
@@ -240,11 +241,39 @@ void imprimirArvoreB(struct arvoreB* arvore){
 
         // percorre os nodos do nivel atual
         for(int i = 0; i < nos_nivel_atual; i++){
-            struct arvoreB *arvore_atual = remover_fila(fila);
-            // tem que terminar
-        }
-    }
+            struct nodo *nodo_atual = remover_fila(fila);
 
+            // Indica se o nodo é interno ou folha
+            printf("%c ", nodo_atual->eh_folha ? 'F' : 'I');
+
+            //numero de chaves
+            printf("(n:%d) [", nodo_atual->n_chaves);
+
+            for(int j = 0; j < nodo_atual->n_chaves; j++){
+                printf("%d", nodo_atual->chaves[j]);
+                // espaço entre as chaves, mas não após a última
+                if(j < nodo_atual->n_chaves - 1)
+                    printf(" ");
+            }
+            printf("]");
+
+            // espaçamento entre os nodos do mesmo nivel, mas não após o último
+            if(i < nos_nivel_atual - 1)
+                printf("        ");
+                
+            // insere os filhos dos nodos do nivel atual na fila para o próximo nivel
+            if(!nodo_atual->eh_folha){
+                for(int j = 0; j <= nodo_atual->n_chaves; j++){
+                    if(nodo_atual->filhos[j] != nullptr)
+                        inserir_fila(fila, nodo_atual->filhos[j]);
+                }
+            }
+        }
+
+        printf("\n");
+        nivel++;
+    }
+    liberar_fila(fila);
 }
 
 // void imprimirEmOrdem(struct arvoreB* arvore){
