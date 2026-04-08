@@ -43,12 +43,58 @@ struct arvoreB *criarArvoreB (int32_t t_arvore){
     return nova_arvore;
 }
 
-void dividir_filho (struct nodo *nodo, int32_t indice){
+void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
+    struct nodo *aux, *novo_nodo;
+
+    aux = nodo->filhos[indice];
+    novo_nodo = cria_nodo (t_arvore, aux->eh_folha);
+    novo_nodo->n_chaves = t_arvore - 1;
+
+    for (int32_t i = 0; i < t_arvore; i++)
+        novo_nodo->chaves[i] = aux->chaves[i + t_arvore];
+
+    if (!aux->eh_folha)
+        for (int32_t i = 0; i < (t_arvore - 1); i++)
+            novo_nodo->filhos[i] = aux->filhos[i + t_arvore];
+
+    aux->n_chaves = t_arvore;
 
 }
 
-void inserir_não_cheio (struct nodo *nodo, int32_t chave){
-    
+void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore){
+    int32_t aux;
+
+    aux = nodo->n_chaves;
+
+    if (nodo->eh_folha){
+        // descoloca as chaves maiores do nodo para abrir espaço para nova
+        // ser inserida - adaptado para c
+        while ((aux > 0) && (chave < nodo->chaves[aux - 1])){
+            nodo->chaves[aux] = nodo->chaves[aux - 1];
+            aux--;
+        }
+
+        nodo->chaves[aux] = chave;
+        nodo->n_chaves++; // atualiza quantidade de chaves no nodo
+    }
+
+    else{
+        // encontra o filho ao qual descer 
+        while ((aux > 0) && (chave < nodo->chaves[aux - 1]))
+            aux--;
+
+        // realiza a divisão do filho se ele já esta cheio
+        if (nodo->filhos[aux]->n_chaves ==  (2 * t_arvore - 1)){
+            dividir_filho (nodo, aux);
+
+            // verificação para saber se a chave desce para o filho a direita
+            if (chave > nodo->chaves[aux])
+                aux++;
+        }
+
+        //chamada recursiva descendo para o filho
+        inserir_não_cheio (nodo->filhos[aux], chave, t_arvore);
+    }
 }
 
 struct nodo *dividir_Raiz (struct arvoreB *arvore){
@@ -69,14 +115,14 @@ void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
 
     aux = arvore->raiz;
     // verificar se o nodo já esta cheio, ou seja as 2t-1 preenchidas
-    if (aux->n_chaves == (2 * arvore->t_arvore -1)){
+    if (aux->n_chaves == (2 * arvore->t_arvore - 1)){
         novo_nodo = dividir_Raiz (arvore);
-        inserir_não_cheio (novo_nodo, chave);
+        inserir_não_cheio (novo_nodo, chave, arvore->t_arvore);
     }
 
     else 
         // insere na raiz, pois é o unico nodo
-        inserir_não_cheio(aux, chave);
+        inserir_não_cheio(aux, chave, arvore->t_arvore);
 
 }
 
@@ -120,4 +166,4 @@ struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEn
 
 // void deletarArvore(struct arvoreB* arvore){
 
-// }
+// }    

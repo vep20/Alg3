@@ -27,9 +27,17 @@ struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha);
 // retorna a arvore em caso de sucesso ou mensagem de erro
 struct arvoreB* criarArvoreB(int32_t t_arvore);
 
+// função auxiliar para inserção 
+void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore);
+
 // função auxiliar para inserção
 struct nodo *dividir_Raiz (struct arvoreB *arvore);
 
+// função auxiliar para inserção
+void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore);
+
+// função para inserir um novo nodo numa arvore b
+// insere na raiz, caso so ela exista e, se não, na insere em uma folha 
 void inserirArvoreB (struct arvoreB* arvore, int32_t chave);
 
 void imprimirArvoreB (struct arvoreB* arvore);
