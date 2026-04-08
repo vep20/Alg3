@@ -50,11 +50,11 @@ void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
     novo_nodo = cria_nodo (t_arvore, aux->eh_folha);
     novo_nodo->n_chaves = t_arvore - 1;
 
-    for (int32_t i = 0; i < t_arvore; i++)
+    for (int32_t i = 0; i < t_arvore - 1; i++)
         novo_nodo->chaves[i] = aux->chaves[i + t_arvore];
 
     if (!aux->eh_folha)
-        for (int32_t i = 0; i < (t_arvore - 1); i++)
+        for (int32_t i = 0; i < t_arvore; i++)
             novo_nodo->filhos[i] = aux->filhos[i + t_arvore];
 
     aux->n_chaves = t_arvore;
