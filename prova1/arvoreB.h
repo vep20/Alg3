@@ -40,8 +40,10 @@ void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore);
 // insere na raiz, caso so ela exista e, se não, na insere em uma folha 
 void inserirArvoreB (struct arvoreB* arvore, int32_t chave);
 
+// imprime a arvoreB de forma hierárquica, mostrando os níveis da arvore
 void imprimirArvoreB (struct arvoreB* arvore);
 
+// imprime
 void imprimirEmOrdem (struct arvoreB* arvore);
 
 // função auxiliar para realizar a busca de forma recursiva
