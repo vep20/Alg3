@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "fila.h"
  
 // estrutura de um nodo para arvorB
 struct nodo {
@@ -54,8 +55,5 @@ struct nodo* buscarArvoreB (struct arvoreB* arvore, int32_t chave,
                             int32_t* idxEncontrado);
                             
 void deletarArvore (struct arvoreB* arvore);
-
-// função para imprimir mensagem de erro e encerrar execução 
-void erro (char *msg);
 
 #endif

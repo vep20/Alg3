@@ -1,7 +1,7 @@
 # makefile Arvore b
 # Alunos: Victor Eduardo e Ronaldo Pereira
 
-GRR = 20203937
+GRR = 20203937_20240514
 
 # Detectar se possui gcc 14 na maquina 
 CC      = $(shell command -v gcc-14 2> /dev/null || echo gcc)
@@ -16,7 +16,7 @@ DIR     = prova1_$(GRR)
 HDR = arvoreB.h 
 
 # arquivos objetos
-OBJ = arvoreB.o test.o
+OBJ = arvoreB.o test.o fila.o
 
 # construção do executavel
 $(TARGET): $(OBJ)
@@ -28,6 +28,9 @@ test.o: test.c $(HDR)
 
 arvoreB.o: arvoreB.c arvoreB.h 
 	$(CC) $(CFLAGS) -c arvoreB.c
+
+fila.o: fila.c fila.h
+	$(CC) $(CFLAGS) -c fila.c
 
 # execução
 run: $(TARGET)

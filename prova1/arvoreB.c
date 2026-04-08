@@ -1,17 +1,12 @@
 #include "arvoreB.h"
 
-void erro (char *msg){
-    fprintf (stderr, "ERRO: %s\n", msg);
-    exit (1);
-}
-
 //pronto
 struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha){
     struct nodo *novo_nodo;
 
     novo_nodo = malloc (sizeof (struct nodo));
     if (!novo_nodo)
-        erro ("Falha ao alocar memoria para nodo");
+        erro ("Falha ao alocar memoria para nodo");//função contida na fila.h
 
     // valores iniciais para o nodo
     novo_nodo->n_chaves = 0;
@@ -130,89 +125,6 @@ void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
         inserir_não_cheio(aux, chave, arvore->t_arvore);
 
 }
-
-//Estrutura da fila para impressão hierárquica da arvoreB
-
-// Nó da fila que guarda um ponteiro para um nó da arvore B
-struct no_fila{
-    struct nodo *nodo_arvore;
-    struct no_fila *prox;
-};
-
-// Controle da fila
-struct Fila{
-    struct no_fila *inicio;
-    struct no_fila *fim;
-    int tamanho;
-};
-
-// inicializando a fila
-struct Fila* criarFila(){
-    struct Fila *fila = malloc(sizeof(struct Fila));
-
-    if (!fila)
-        erro("Falha ao alocar memoria para fila");
-
-    fila->inicio = NULL;
-    fila->fim = NULL;
-    fila->tamanho = 0;
-
-    return fila;
-}
-
-// insere os nodos da arvoreB na fila para impressão hierárquica
-void inserir_fila(struct Fila *fila, struct nodo *nodo_atual){
-    if(!fila || !nodo_atual)
-        erro("Fila ou nodo nulo");
-
-    struct no_fila *novo_no_fila = malloc(sizeof(struct no_fila));
-
-    if (!novo_no_fila)
-        erro("Falha ao alocar memoria para nó da fila");
-
-    novo_no_fila->nodo_arvore = nodo_atual;
-    novo_no_fila->prox = NULL;
-
-    if (fila->fim)
-        fila->fim->prox = novo_no_fila;
-    else
-        fila->inicio = novo_no_fila;
-
-    fila->fim = novo_no_fila;
-    fila->tamanho++;
-}
-
-// remove os nodos da fila para impressão hierárquica, retornando o nodo da arvoreB
-struct nodo *remover_fila(struct Fila *fila){
-    if(!fila || !fila->inicio)
-        erro("Fila vazia");
-
-    struct no_fila *aux = fila->inicio;
-    struct nodo *info = aux->nodo_arvore;
-
-    fila->inicio = aux->prox;
-    if (!fila->inicio)
-        fila->fim = NULL;
-
-    free(aux);
-    fila->tamanho--;
-
-    return info;
-}
-
-// verifica se a fila esta vazia
-bool fila_vazia(struct Fila *fila){
-    return fila->tamanho == 0;
-}
-
-void liberar_fila(struct Fila *fila){
-    if(!fila)
-        return;
-    while (!fila_vazia(fila))
-        remover_fila(fila);
-    free(fila);
-}
-// fim da estrutura de fila
 
 //pronto
 void imprimirArvoreB(struct arvoreB* arvore){
