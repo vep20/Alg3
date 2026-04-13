@@ -106,7 +106,7 @@ struct nodo *dividir_Raiz (struct arvoreB *arvore){
     
     //dividir_filho (nova_raiz, 0);// faltando argumentos da função
     
-    return nova_raiz; //teste 
+    return nova_raiz; 
 }
 
 //pronto
