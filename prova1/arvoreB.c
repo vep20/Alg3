@@ -38,7 +38,7 @@ struct arvoreB *criarArvoreB (int32_t t_arvore){
     return nova_arvore;
 }
 
-//imcompleto
+//pronto
 void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
     struct nodo *aux, *novo_nodo;
 
@@ -46,28 +46,33 @@ void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
     novo_nodo = cria_nodo (t_arvore, aux->eh_folha);
     novo_nodo->n_chaves = t_arvore - 1;
 
+    // copia todas as t-1 chaves dos filhos do nodo para o novo
     for (int32_t i = 0; i < t_arvore - 1; i++)
         novo_nodo->chaves[i] = aux->chaves[i + t_arvore];
 
+    // copia os filhos maiores caso o nodo não seja folha 
     if (!aux->eh_folha)
         for (int32_t i = 0; i < t_arvore; i++)
             novo_nodo->filhos[i] = aux->filhos[i + t_arvore];
 
     aux->n_chaves = t_arvore - 1;
 
+    // desloca os ponteiros de filhos
     for (int32_t i = aux->n_chaves; i >= indice + 1; i--)
         nodo->filhos[i + 1] = nodo->filhos[i];
 
     nodo->filhos [indice + 1] = novo_nodo;
 
+    // abre espaço no pai para chave que for substituir
     for (int32_t i = nodo->n_chaves - 1; i >= indice; i--)
         nodo->chaves[i + 1] = nodo->chaves[i];
 
+        // split na chave escolhida por mediana
     nodo->chaves[indice] = aux->chaves[t_arvore - 1];   
     nodo->n_chaves++;
 }
 
-//imcompleto
+//pronto
 void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore){
     int32_t aux;
 
@@ -92,7 +97,7 @@ void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore){
 
         // realiza a divisão do filho se ele já esta cheio
         if (nodo->filhos[aux]->n_chaves ==  (2 * t_arvore - 1)){
-            //dividir_filho (nodo, aux); //faltando argumentos da função
+            dividir_filho (nodo, aux, t_arvore); 
 
             // verificação para saber se a chave desce para o filho a direita
             if (chave > nodo->chaves[aux])
@@ -104,7 +109,7 @@ void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore){
     }
 }
 
-//incompleto
+//pronto
 struct nodo *dividir_Raiz (struct arvoreB *arvore){
     struct nodo *nova_raiz;
 
@@ -112,7 +117,7 @@ struct nodo *dividir_Raiz (struct arvoreB *arvore){
     nova_raiz->filhos[0] = arvore->raiz; // adaptado para linguagem c
     arvore->raiz = nova_raiz;
     
-    //dividir_filho (nova_raiz, 0);// faltando argumentos da função
+    dividir_filho (nova_raiz, 0, arvore->t_arvore);
     
     return nova_raiz; 
 }
@@ -134,6 +139,7 @@ void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
 }
 
 void imprimirArvoreB(struct arvoreB* arvore){
+    
     if(!arvore || !arvore->raiz)
         erro("Arvore vazia");
 
@@ -194,31 +200,33 @@ void imprimirArvoreB(struct arvoreB* arvore){
     liberar_fila(fila);
 }
 
-void buscaArvoreEmOrdem(struct nodo *nodo_atual){
+void travessiaEmOrdem(struct nodo *nodo_atual){
+    int32_t i;
+
     if(!nodo_atual)
         return;
 
-    int32_t i;
 
-    printf("Em ordem: ");
-
-    for(int i = 0; i < nodo_atual->n_chaves; i++){
+    for(i = 0; i < nodo_atual->n_chaves; i++){
+        // desce para folha, que é menor, antes de imprimir a chave
         if(!nodo_atual->eh_folha)
-        buscaArvoreEmOrdem(nodo_atual->filhos[i]);
-        
-        printf("%d ", nodo_atual->filhos[i]);
+            travessiaEmOrdem(nodo_atual->filhos[i]);
+    
+        printf("%d ", nodo_atual->chaves[i]);
     }
     
-    if(!nodo_atual->eh_folha)
-    buscaArvoreEmOrdem(nodo_atual->filhos[i]);
+    // vai para o ultimo filho mais a direita da arvore
+    if(!nodo_atual->eh_folha) 
+        travessiaEmOrdem(nodo_atual->filhos[i]);
 }
 
 void imprimirEmOrdem(struct arvoreB* arvore){
+    
     if(!arvore || !arvore->raiz)
-        erro("Arvore vazia");
+        erro("Arvore não existe ou esta vazia");
 
-    buscaArvoreEmOrdem(arvore->raiz);
-
+    printf("Em ordem: ");
+    travessiaEmOrdem(arvore->raiz);
     printf("\n");
 }
 
@@ -254,8 +262,9 @@ struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEn
 }
 
 void liberarNodos(struct nodo* atual){
+    
     if(!atual)
-        return;
+        erro ("Nodo raiz não allocado");
     
     if(!atual->eh_folha){
         for(int i = 0; i <= atual->n_chaves; i++)
@@ -268,8 +277,9 @@ void liberarNodos(struct nodo* atual){
 }
 
 void deletarArvore(struct arvoreB* arvore){
+    
     if(!arvore)
-        return;
+        erro ("Arvore não existe");
 
     liberarNodos(arvore->raiz);
     free(arvore->raiz);

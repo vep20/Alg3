@@ -48,7 +48,7 @@ void imprimirArvoreB (struct arvoreB* arvore);
 void imprimirEmOrdem (struct arvoreB* arvore);
 
 //faz a busca de travessia em ordem na arvoreB.
-void buscaArvoreEmOrdem(struct nodo* atual);
+void travessiaEmOrdem (struct nodo* atual);
 
 // função auxiliar para realizar a busca de forma recursiva
 struct nodo* buscarArvoreBrec (struct nodo* atual, int32_t chave, 
