@@ -55,11 +55,17 @@ void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
         for (int32_t i = 0; i < t_arvore; i++)
             novo_nodo->filhos[i] = aux->filhos[i + t_arvore];
 
-    aux->n_chaves = t_arvore;
-    for (int i = (aux->n_chaves + 1); i < indice; i--)
+    aux->n_chaves = t_arvore - 1;
+
+    for (int32_t i = aux->n_chaves; i >= indice + 1; i--)
         nodo->filhos[i + 1] = nodo->filhos[i];
 
-    nodo->chaves[indice] = aux->chaves[t_arvore];   
+    nodo->filhos [indice + 1] = novo_nodo;
+
+    for (int32_t i = nodo->n_chaves - 1; i >= indice; i--)
+        nodo->chaves[i + 1] = nodo->chaves[i];
+
+    nodo->chaves[indice] = aux->chaves[t_arvore - 1];   
     nodo->n_chaves++;
 }
 
