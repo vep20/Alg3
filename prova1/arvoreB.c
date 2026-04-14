@@ -1,6 +1,5 @@
 #include "arvoreB.h"
 
-//pronto
 struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha){
     struct nodo *novo_nodo;
 
@@ -24,7 +23,6 @@ struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha){
     return novo_nodo;
 }
 
-//pronto
 struct arvoreB *criarArvoreB (int32_t t_arvore){
     struct arvoreB *nova_arvore;
 
@@ -119,7 +117,6 @@ struct nodo *dividir_Raiz (struct arvoreB *arvore){
     return nova_raiz; 
 }
 
-//pronto
 void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
     struct nodo *aux, *novo_nodo;
 
@@ -136,7 +133,6 @@ void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
 
 }
 
-//pronto
 void imprimirArvoreB(struct arvoreB* arvore){
     if(!arvore || !arvore->raiz)
         erro("Arvore vazia");
@@ -198,15 +194,6 @@ void imprimirArvoreB(struct arvoreB* arvore){
     liberar_fila(fila);
 }
 
-void imprimirEmOrdem(struct arvoreB* arvore){
-    if(!arvore || !arvore->raiz)
-        erro("Arvore vazia");
-
-    buscaArvoreEmOrdem(arvore->raiz);
-
-    printf("\n");
-}
-
 void buscaArvoreEmOrdem(struct nodo *nodo_atual){
     if(!nodo_atual)
         return;
@@ -217,13 +204,22 @@ void buscaArvoreEmOrdem(struct nodo *nodo_atual){
 
     for(int i = 0; i < nodo_atual->n_chaves; i++){
         if(!nodo_atual->eh_folha)
-            buscaArvoreEmOrdem(nodo_atual->filhos[i]);
-
+        buscaArvoreEmOrdem(nodo_atual->filhos[i]);
+        
         printf("%d ", nodo_atual->filhos[i]);
     }
-
+    
     if(!nodo_atual->eh_folha)
-        buscaArvoreEmOrdem(nodo_atual->filhos[i]);
+    buscaArvoreEmOrdem(nodo_atual->filhos[i]);
+}
+
+void imprimirEmOrdem(struct arvoreB* arvore){
+    if(!arvore || !arvore->raiz)
+        erro("Arvore vazia");
+
+    buscaArvoreEmOrdem(arvore->raiz);
+
+    printf("\n");
 }
 
 //pronto
@@ -257,7 +253,24 @@ struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEn
     return aux;    
 }
 
+void liberarNodos(struct nodo* atual){
+    if(!atual)
+        return;
+    
+    if(!atual->eh_folha){
+        for(int i = 0; i <= atual->n_chaves; i++)
+            liberarNodos(atual->filhos[i]);
+    }
 
-// void deletarArvore(struct arvoreB* arvore){
+    free(atual->chaves);
+    free(atual->filhos);
+    free(atual);        
+}
 
-// }    
+void deletarArvore(struct arvoreB* arvore){
+    if(!arvore)
+        return;
+
+    liberarNodos(arvore->raiz);
+    free(arvore->raiz);
+}    

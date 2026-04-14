@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "fila.h"
- 
+
 // estrutura de um nodo para arvorB
 struct nodo {
     int32_t n_chaves; // numero de chaves em um nodo 
@@ -29,13 +29,13 @@ struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha);
 struct arvoreB* criarArvoreB(int32_t t_arvore);
 
 // função auxiliar para inserção 
-void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore);
+void dividir_filho (struct nodo* nodo, int32_t indice, int32_t t_arvore);
 
 // função auxiliar para inserção
-struct nodo *dividir_Raiz (struct arvoreB *arvore);
+struct nodo *dividir_Raiz (struct arvoreB* arvore);
 
 // função auxiliar para inserção
-void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore);
+void inserir_não_cheio (struct nodo* atual, int32_t chave, int32_t t_arvore);
 
 // função para inserir um novo nodo numa arvore b
 // insere na raiz, caso so ela exista e, se não, na insere em uma folha 
@@ -48,15 +48,19 @@ void imprimirArvoreB (struct arvoreB* arvore);
 void imprimirEmOrdem (struct arvoreB* arvore);
 
 //faz a busca de travessia em ordem na arvoreB.
-void buscaArvoreEmOrdem(struct nodo *nodo_atual);
+void buscaArvoreEmOrdem(struct nodo* atual);
 
 // função auxiliar para realizar a busca de forma recursiva
-struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, 
+struct nodo* buscarArvoreBrec (struct nodo* atual, int32_t chave, 
                             int32_t* idxEncontrado);
 
 struct nodo* buscarArvoreB (struct arvoreB* arvore, int32_t chave,
                             int32_t* idxEncontrado);
-                            
+
+// função que faz a travessia pos-ordem para liberar a memoria alocada para os nodos e chaves da arvore
+void liberarNodos(struct nodo* atual);
+
+// função que libera a memória alocada para a arvoreB, seus nodos e chaves
 void deletarArvore (struct arvoreB* arvore);
 
 #endif
