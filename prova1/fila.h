@@ -20,7 +20,7 @@ struct Fila{
 // função para imprimir mensagem de erro e encerrar execução 
 void erro (char *msg);
 
-// função que inicia a estrutura de 
+// função que inicia a estrutura de fila
 struct Fila* criarFila();
 
 // insere os nodos da arvoreB na fila para impressão hierárquica

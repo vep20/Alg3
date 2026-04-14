@@ -20,6 +20,10 @@ struct nodo *cria_nodo (int32_t t_arvore, bool eh_folha){
     if (!novo_nodo->filhos)
         erro ("Falha ao alocar memoria para filhos do nodo");
 
+    // atribui todos os ponteiros de filho como NULL para evitar lixos de memoria 
+    for (int32_t i = 0; i < (2 * t_arvore); i++ )
+        novo_nodo->filhos[i] = NULL;
+
     return novo_nodo;
 }
 
@@ -38,7 +42,6 @@ struct arvoreB *criarArvoreB (int32_t t_arvore){
     return nova_arvore;
 }
 
-//pronto
 void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
     struct nodo *aux, *novo_nodo;
 
@@ -58,7 +61,7 @@ void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
     aux->n_chaves = t_arvore - 1;
 
     // desloca os ponteiros de filhos
-    for (int32_t i = aux->n_chaves; i >= indice + 1; i--)
+    for (int32_t i = nodo->n_chaves; i >= indice + 1; i--)
         nodo->filhos[i + 1] = nodo->filhos[i];
 
     nodo->filhos [indice + 1] = novo_nodo;
@@ -72,7 +75,6 @@ void dividir_filho (struct nodo *nodo, int32_t indice, int32_t t_arvore){
     nodo->n_chaves++;
 }
 
-//pronto
 void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore){
     int32_t aux;
 
@@ -109,7 +111,6 @@ void inserir_não_cheio (struct nodo *nodo, int32_t chave, int32_t t_arvore){
     }
 }
 
-//pronto
 struct nodo *dividir_Raiz (struct arvoreB *arvore){
     struct nodo *nova_raiz;
 
@@ -183,7 +184,7 @@ void imprimirArvoreB(struct arvoreB* arvore){
 
             // espaçamento entre os nodos do mesmo nivel, mas não após o último
             if(i < nos_nivel_atual - 1)
-                printf("        ");
+                printf("  ");
                 
             // insere os filhos dos nodos do nivel atual na fila para o próximo nivel
             if(!nodo_atual->eh_folha){
@@ -230,7 +231,6 @@ void imprimirEmOrdem(struct arvoreB* arvore){
     printf("\n");
 }
 
-//pronto
 struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, int32_t* idxEncontrado){
     int32_t aux;
 
@@ -252,7 +252,6 @@ struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, int32_t* idxEn
     return buscarArvoreBrec (atual, chave, idxEncontrado); 
 }
 
-//pronto
 struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEncontrado){
     struct nodo *aux;
 
@@ -264,7 +263,7 @@ struct nodo* buscarArvoreB(struct arvoreB* arvore, int32_t chave, int32_t* idxEn
 void liberarNodos(struct nodo* atual){
     
     if(!atual)
-        erro ("Nodo raiz não allocado");
+       return;
     
     if(!atual->eh_folha){
         for(int i = 0; i <= atual->n_chaves; i++)
@@ -282,5 +281,5 @@ void deletarArvore(struct arvoreB* arvore){
         erro ("Arvore não existe");
 
     liberarNodos(arvore->raiz);
-    free(arvore->raiz);
+    free(arvore);
 }    

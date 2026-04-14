@@ -61,9 +61,16 @@ bool fila_vazia(struct Fila *fila){
 }
 
 void liberar_fila(struct Fila *fila){
+    struct no_fila *aux, *proxi;
     if(!fila)
         return;
-    while (!fila_vazia(fila))
-        remover_fila(fila);
+
+    aux = fila->inicio;
+    while (aux != NULL){
+        proxi = aux->prox;
+        free (aux);
+        aux = proxi;
+    }
+
     free(fila);
 }
