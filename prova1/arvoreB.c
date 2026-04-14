@@ -192,9 +192,33 @@ void imprimirArvoreB(struct arvoreB* arvore){
     liberar_fila(fila);
 }
 
-// void imprimirEmOrdem(struct arvoreB* arvore){
+void imprimirEmOrdem(struct arvoreB* arvore){
+    if(!arvore || !arvore->raiz)
+        erro("Arvore vazia");
 
-// }
+    buscaArvoreEmOrdem(arvore->raiz);
+
+    printf("\n");
+}
+
+void buscaArvoreEmOrdem(struct nodo *nodo_atual){
+    if(!nodo_atual)
+        return;
+
+    int32_t i;
+
+    printf("Em ordem: ");
+
+    for(int i = 0; i < nodo_atual->n_chaves; i++){
+        if(!nodo_atual->eh_folha)
+            buscaArvoreEmOrdem(nodo_atual->filhos[i]);
+
+        printf("%d ", nodo_atual->filhos[i]);
+    }
+
+    if(!nodo_atual->eh_folha)
+        buscaArvoreEmOrdem(nodo_atual->filhos[i]);
+}
 
 //pronto
 struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, int32_t* idxEncontrado){

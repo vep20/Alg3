@@ -44,8 +44,11 @@ void inserirArvoreB (struct arvoreB* arvore, int32_t chave);
 // imprime a arvoreB de forma hierárquica, mostrando os níveis da arvore
 void imprimirArvoreB (struct arvoreB* arvore);
 
-// imprime
+// imprime a arvore em ordem crescente.
 void imprimirEmOrdem (struct arvoreB* arvore);
+
+//faz a busca de travessia em ordem na arvoreB.
+void buscaArvoreEmOrdem(struct nodo *nodo_atual);
 
 // função auxiliar para realizar a busca de forma recursiva
 struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, 
