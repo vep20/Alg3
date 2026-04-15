@@ -161,7 +161,7 @@ void imprimirArvoreB(struct arvoreB* arvore){
 
         // cabeçalho do nivel
         printf("----//----\n");
-        printf("Nivel %d:\n", nivel);
+        printf("Nivel %d\n", nivel);
         printf("----//----\n");
 
         // percorre os nodos do nivel atual
@@ -189,7 +189,7 @@ void imprimirArvoreB(struct arvoreB* arvore){
             // insere os filhos dos nodos do nivel atual na fila para o próximo nivel
             if(!nodo_atual->eh_folha){
                 for(int j = 0; j <= nodo_atual->n_chaves; j++){
-                    if(nodo_atual->filhos[j] != nullptr)
+                    if(nodo_atual->filhos[j] != NULL)
                         inserir_fila(fila, nodo_atual->filhos[j]);
                 }
             }
@@ -244,8 +244,11 @@ struct nodo* buscarArvoreBrec (struct nodo *atual, int32_t chave, int32_t* idxEn
         return atual;
     } 
     
-    else if (atual->eh_folha)
+    // não encontrado
+    if (atual->eh_folha){
+        *idxEncontrado = -1;
         return NULL;
+    }
     
     atual = atual->filhos[aux]; // atual atualizado para ponteiro do filho 
 
