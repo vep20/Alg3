@@ -60,8 +60,11 @@ struct nodo* buscarArvoreB (struct arvoreB* arvore, int32_t chave,
 // função que faz a travessia pos-ordem para liberar a memoria alocada para os nodos e chaves da arvore
 void liberarNodos(struct nodo* atual);
 
+// função para encontrar o predecessor de uma chave
+struct nodo *encontrarPred (struct nodo *filho_atual, int *indice, int32_t chave);
+
 // função auxiliar para realizar a exclusão de forma recursiva
-bool removerChaveArvoreBrec (struct nodo *atual, int32_t chave);
+bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t chave);
 
 // função que faz a deleção de uma chave da arvore, retornando true em caso de sucesso ou false caso a chave não exista
 bool removerChaveArvoreB(struct arvoreB* arvore, int32_t chave);

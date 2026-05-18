@@ -287,33 +287,73 @@ void deletarArvore(struct arvoreB* arvore){
     free(arvore);
 }    
 
-bool removerChaveArvoreBrec (struct nodo *atual, int32_t chave){
+struct nodo *encontrarPred (struct nodo *filho_atual, int *indice, int32_t chave){
+    struct nodo *aux;
 
-    // Lista de casos //
+    if (!filho_atual)
+        erro ("Nodo filho invalido");
 
-    // caso 1 a chave esta na folha ou não existe
-    for (int i = 1; i <= atual->n_chaves && chave > atual->chaves[i]; i++)
+    if (!filho_atual->eh_folha)
+
+
+    for (int i = 0; i < chave; i++)
         
-    if (i <= atual->n_chaves && chave == atual->chaves[i]){
+    
+    return aux;        
+}
+
+bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t chave){
+    int32_t indice, indice_pre;
+    struct nodo *aux_pre;
+    // Lista de casos //
+    
+    // adaptado linguagem C
+    indice = 0;
+    // percorre as chaves dos nodos até encontrar onde a chave buscada
+    // esta, deveria estar ou onde descer
+    while (indice <= atual->n_chaves && chave > atual->chaves[indice])
+        indice++; 
+    
+    // caso 1 a chave esta na folha ou não existe
+    if (indice <= atual->n_chaves && chave == atual->chaves[indice]){
+        
         if (atual->eh_folha){
-            // remove a chave do nodo***************
-            // return;
+            // remove a chave do nodo e redimenciona o vetor
+            for (int i = atual->chaves[indice]; i < atual->n_chaves; i++)
+                atual->chaves[i] = atual->chaves[i + 1];
+            
+            atual->n_chaves--; // att a qtd de chaves no nodo
+            return true;
         }
-/*         else{
-            if(atual->filhos[i]->n_chaves >= )
+    
+        else{
+
+            if (atual->filhos[indice]->n_chaves >= arvore->t_arvore){
+                
+                aux_pre = encontrarPred (atual->filhos[indice], &indice_pre, chave);
+                // return removerChaveArvoreBrec ();
+            }
         
             else{
 
             }
-        } */
+        }
 
     }
+
+    else{
+
+        if (atual->eh_folha)
+            return false; // chave não encontrada
+    }
+
+    return removerChaveArvoreBrec (arvore, atual->filhos[indice], chave);
 }
 
-bool removerChaveArvoreB(struct arvoreB* arvore, int32_t chave){
-    bool aux;
+bool removerChaveArvoreB (struct arvoreB* arvore, int32_t chave){
+    
     if (!arvore)
         erro ("Arvore não existe");
 
-    return aux = removerChaveArvoreBrec (arvore->raiz, chave);
+    return removerChaveArvoreBrec (arvore, arvore->raiz, chave);
 }
