@@ -61,7 +61,10 @@ struct nodo* buscarArvoreB (struct arvoreB* arvore, int32_t chave,
 void liberarNodos(struct nodo* atual);
 
 // função para encontrar o predecessor de uma chave
-struct nodo *encontrarPred (struct nodo *filho_atual, int *indice, int32_t chave);
+struct nodo *encontrarPred (struct nodo *filho_atual, int *idxEncontrado);
+
+// função para encontrar o sucessor de uma chave
+struct nodo *encontrarSuc (struct nodo *filho_atual, int *idxEncontrado);
 
 // função auxiliar para realizar a exclusão de forma recursiva
 bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t chave);

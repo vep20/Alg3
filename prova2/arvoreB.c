@@ -133,7 +133,7 @@ void inserirArvoreB (struct arvoreB* arvore, int32_t chave){
         inserir_não_cheio (novo_nodo, chave, arvore->t_arvore);
     }
 
-    else 
+    else ual->chaves[i + 1];
         // insere na raiz, pois é o unico nodo
         inserir_não_cheio(aux, chave, arvore->t_arvore);
 
@@ -287,24 +287,32 @@ void deletarArvore(struct arvoreB* arvore){
     free(arvore);
 }    
 
-struct nodo *encontrarPred (struct nodo *filho_atual, int *indice, int32_t chave){
+struct nodo *encontrarPred (struct nodo *filho_atual, int *idxEncontrado){
     struct nodo *aux;
 
-    if (!filho_atual)
-        erro ("Nodo filho invalido");
+    if (!filho_atual->eh_folha){
+        // o predecessor é o ultimo indice do vetor
+        *idxEncontrado = filho_atual->n_chaves - 1;
+        return filho_atual;
+    }
+     
+    // desce pelo filho mais a direita
+    return encontrarPred (filho_atual->filhos[filho_atual->n_chaves], idxEncontrado);       
+}
 
-    if (!filho_atual->eh_folha)
+struct nodo *encontrarSuc (struct nodo *filho_atual, int *idxEncontrado){
 
-
-    for (int i = 0; i < chave; i++)
-        
-    
-    return aux;        
+    if (filho_atual->eh_folha){
+        *idxEncontrado = 0;
+        return filho_atual;
+    }
+    // Caso contrário, continua descendo pelo filho mais à esquerda
+    return encontrarSuc(filho_atual->filhos[0], idxEncontrado);       
 }
 
 bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t chave){
-    int32_t indice, indice_pre;
-    struct nodo *aux_pre;
+    int32_t indice, indice_aux, chave_aux;
+    struct nodo *aux;
     // Lista de casos //
     
     // adaptado linguagem C
@@ -321,22 +329,37 @@ bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t
             // remove a chave do nodo e redimenciona o vetor
             for (int i = atual->chaves[indice]; i < atual->n_chaves; i++)
                 atual->chaves[i] = atual->chaves[i + 1];
-            
+
             atual->n_chaves--; // att a qtd de chaves no nodo
             return true;
         }
     
         else{
 
+            // filho esquerdo possui t-chaves
             if (atual->filhos[indice]->n_chaves >= arvore->t_arvore){
                 
-                aux_pre = encontrarPred (atual->filhos[indice], &indice_pre, chave);
-                // return removerChaveArvoreBrec ();
+                aux = encontrarPred (atual->filhos[indice], &indice_aux);
+                chave_aux = aux->chaves[indice_aux];
+                atual->chaves[indice] = chave_aux;
+                return removerChaveArvoreBrec (arvore, atual->filhos[indice], chave_aux);
             }
-        
+            
+            // filho direito possui t-chaves
+            else if (atual->filhos[indice + 1]->n_chaves >= arvore->t_arvore){
+
+                    aux = encontrarSuc (atual->filhos[indice + 1], &indice_aux);
+                    chave_aux = aux->chaves[indice_aux];
+                    atual->chaves[indice] = chave_aux;
+                    return removerChaveArvoreBrec (arvore, atual->filhos[indice + 1], chave_aux);                    
+            }
+
+            // ambos os filhos tem t-1 chaves
             else{
+                
 
             }
+
         }
 
     }
