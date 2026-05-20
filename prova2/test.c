@@ -27,7 +27,7 @@ int main (){
             arvore = criarArvoreB (aux_t);
 
             do {
-                printf ("\n[i] Inserir, [b] Buscar, [p] Parar: ");
+                printf ("\n[i] Inserir, [r] Remover, [b] Buscar, [p] Parar: ");
                 scanf (" %c", &acao_arvore);
 
                 if (acao_arvore == 'i') {
@@ -35,6 +35,14 @@ int main (){
                     scanf ("%d", &chave);
                     inserirArvoreB (arvore, chave);
                 } 
+                else if (acao_arvore == 'r') {
+                    printf("Chave: ");
+                    scanf ("%d", &chave);
+                    if (removerChaveArvoreB (arvore, chave))
+                        printf ("Chave %d removida com sucesso!\n", chave);
+                    else
+                        printf ("Chave %d nao encontrada.\n", chave);
+                }
                 else if (acao_arvore == 'b') {
                     struct nodo *res;
                     int32_t idx;
@@ -46,7 +54,7 @@ int main (){
                     else 
                         printf ("Chave nao encontrada (idx: %d)\n", idx);
                 }
-            } while (acao_arvore == 'i' || acao_arvore == 'b');
+            } while (acao_arvore == 'i' || acao_arvore == 'b' || acao_arvore == 'r');
 
             printf("\n");
             imprimirArvoreB (arvore);

@@ -288,7 +288,6 @@ void deletarArvore(struct arvoreB* arvore){
 }    
 
 struct nodo *encontrarPred (struct nodo *filho_atual, int *idxEncontrado){
-    struct nodo *aux;
 
     if (filho_atual->eh_folha){
         // o predecessor é o ultimo indice do vetor
@@ -432,7 +431,6 @@ struct nodo *irmaoImediatoComMaisChaves (struct nodo *atual, int32_t indice, sho
 bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t chave){
     int32_t indice, indice_aux, chave_aux;
     struct nodo *aux, *irmao;
-    bool removido;
     short direcao_irmao; 
 
     indice = 0;
@@ -441,7 +439,7 @@ bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t
     while (indice < atual->n_chaves && chave > atual->chaves[indice])
         indice++; 
     
-    //chave encontrada no nodo atual
+    // chave encontrada no nodo atual
     if (indice < atual->n_chaves && chave == atual->chaves[indice]){
         
         // caso 1 a chave esta na folha ou não existe
@@ -480,8 +478,6 @@ bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t
                 // mescla os filhos e desce para o filho esquerdo, que agora tem 2t-1 chaves
                 mesclarFilhos (atual, indice, arvore->t_arvore);
 
-                removido = removerChaveArvoreBrec (arvore, atual->filhos[indice], chave);
-
                 if (atual == arvore->raiz && atual->n_chaves == 0){
 
                     // apaga a raiz antiga e atualiza a raiz para o filho mesclado
@@ -490,9 +486,10 @@ bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t
                     free (atual->chaves);
                     free (atual->filhos);
                     free (atual);
+                    return removerChaveArvoreBrec (arvore, arvore->raiz, chave);
                 }
             
-                return removido;
+                return removerChaveArvoreBrec (arvore, atual->filhos[indice], chave);;
             }
         }
     }
@@ -503,17 +500,45 @@ bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t
         if (atual->eh_folha)
             return false;
         
-        // 3b - nodo interno não possui k
-        else {
-            if (atual->filhos[indice]->n_chaves < arvore->t_arvore){
-                // b = irmaoImediatoComMaisChaves(x,i)
-                irmao = irmaoImediatoComMaisChaves(atual, indice, &direcao_irmao);
-                // se b.n ≥ t
+        // 3b - garantir que o no que vamos descer tem pelo menos t-chaves
+        if (atual->filhos[indice]->n_chaves < arvore->t_arvore){
+            irmao = irmaoImediatoComMaisChaves(atual, indice, &direcao_irmao);
 
+            if (irmao->n_chaves >= arvore->t_arvore){
+                
+                if (direcao_irmao ==  0)
+                    EmprestarDaEsquerda (atual, indice);
+
+                else
+                    EmprestarDaDireita (atual, indice);
+            }
+
+    
+            // 3c - nenhum irmão possui chaves suficientes
+            else{
+                // mescla com o filho esquerdo
+                if (direcao_irmao == 0){
+                    mesclarFilhos (atual, indice - 1, arvore->t_arvore);
+                    indice--; // para o return final da funcao descer pelo no corretp
+                }
+
+                else // mescla com o filho direito 
+                    mesclarFilhos (atual, indice, arvore->t_arvore);
+                
+                if (atual->n_chaves < 1){ // atual era raiz e ficou sem nodo
+                    
+                    arvore->raiz = atual->filhos[0];
+                    free (atual->chaves);
+                    free (atual->filhos);
+                    free (atual);
+
+                    return removerChaveArvoreBrec (arvore, arvore->raiz, chave);
+                } 
             }
         }
     }
 
+    // atual->filhos[indice] possui t ou mais chaves
     return removerChaveArvoreBrec (arvore, atual->filhos[indice], chave);
 }
 
