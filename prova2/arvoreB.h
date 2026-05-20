@@ -66,6 +66,12 @@ struct nodo *encontrarPred (struct nodo *filho_atual, int *idxEncontrado);
 // função para encontrar o sucessor de uma chave
 struct nodo *encontrarSuc (struct nodo *filho_atual, int *idxEncontrado);
 
+void EmprestarDaEsquerda(struct nodo *atual, int32_t indice);
+
+void EmprestarDaDireita(struct nodo *atual, int32_t indice);
+
+struct nodo *irmaoImediatoComMaisChaves (struct nodo *atual, int32_t indice, short *direcao);
+
 // função auxiliar para realizar a exclusão de forma recursiva
 bool removerChaveArvoreBrec (struct arvoreB *arvore, struct nodo *atual, int32_t chave);
 
