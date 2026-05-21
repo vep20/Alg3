@@ -423,7 +423,7 @@ struct nodo *irmaoImediatoComMaisChaves (struct nodo *atual, int32_t indice, sho
 
     // irmao direito possui mais chaves
     else{ 
-        *direcao = 1;
+        *direcao = 1;   
         return atual->filhos[indice + 1];
     }
 }
